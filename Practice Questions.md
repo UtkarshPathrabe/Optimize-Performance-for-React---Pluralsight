@@ -64,9 +64,37 @@ C. By also implementing `useCallback` to reset it when it should be cleared
 D. By also implementing `useEffect` to reset it when it should be cleared  
 Answer: By passing it the correct dependencies  
 
-Q10. When you wrap a functional component with React.memo, how do you control when it renders?  
+Q10. When you wrap a functional component with `React.memo`, how do you control when it renders?  
 A. You specify a function on the second parameter that compares props  
 B. You can't because it will automatically do reference comparisons  
 C. You have to specify a dependency list on its second parameter  
 D. You need to use local state to compare properties  
 Answer: You specify a function on the second parameter that compares props  
+
+Q11. What is the recommended way to identify wasted renders?  
+A. By doing a performance output build  
+B. By adding an npm module that help you track it  
+C. By using console.log statements  
+D. By using the React performance profiler  
+Answer: By using the React performance profiler  
+
+Q12. You have a class component that renders too often. The component receives a lot of data on it's props and some parts of the props require the component to re-render and some do not. How do you proceed in addressing this issue?  
+A. Implement the shouldComponentUpdate method  
+B. Extend the component from React.PureComponent  
+C. Ensure that you store all significant data in local state  
+D. Refactor the component to a functional component  
+Answer: Implement the shouldComponentUpdate method  
+
+Q13. When you implement `shouldComponentUpdate` in a class component, what does it mean to return true from the method?  
+A. It means the props are different enough to require a render  
+B. It means that the results should be cached in local state  
+C. It means that the component should download a newer version of itself  
+D. It means that the props are the same and do not require a render  
+Answer: It means the props are different enough to require a render  
+
+Q14. What is the biggest benefit of React's virtual DOM approach?  
+A. React can run on the server, without a browser  
+B. React can be compatible with more browsers  
+C. React does not need to do expensive DOM operations on every render  
+D. React renders on a Canvas element which makes it faster  
+Answer: React does not need to do expensive DOM operations on every render  
