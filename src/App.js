@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect, useCallback } from "react";
+import React, { useRef, useState, useEffect, useCallback, lazy, Suspense } from "react";
 import "./App.css";
 import useComponentSize from "@rehooks/component-size";
 import cardData from "./data.json";
@@ -6,7 +6,10 @@ import uuid from "uuid";
 import { Card } from "./Card";
 import { AddButton } from "./AddButton";
 import { Summary } from "./Summary";
-import { AddModal } from "./AddModal";
+
+const AddModal = lazy(() => import('./AddModal'));
+
+const ModalLoader = () => <div className='Modal-loader'>Loading</div>
 
 function positionCards(cards, width, height) {
   const updatedCards = {};
@@ -124,18 +127,20 @@ function App() {
       <Summary cards={cards} />
       <AddButton onClick={showDialog} />
       {isAddOpen && (
-        <AddModal
-          isOpen={isAddOpen}
-          onClose={() => setIsAddOpen(false)}
-          onAdd={cardText => {
-            const updatedCards = positionCards(
-              addCard(cards, cardText),
-              width,
-              height
-            );
-            setCards(updatedCards);
-          }}
-        />
+        <Suspense fallback={<ModalLoader />}>
+          <AddModal
+            isOpen={isAddOpen}
+            onClose={() => setIsAddOpen(false)}
+            onAdd={cardText => {
+              const updatedCards = positionCards(
+                addCard(cards, cardText),
+                width,
+                height
+              );
+              setCards(updatedCards);
+            }}
+          />
+        </Suspense>
       )}
     </div>
   );
