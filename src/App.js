@@ -9,13 +9,20 @@ import { Summary } from "./Summary";
 import { AddModal } from "./AddModal";
 
 function positionCards(cards, width, height) {
+  const updatedCards = {};
+
   Object.values(cards).forEach(
     card =>
-      (card.position = {
-        left: card.offset.x + width * 0.5,
-        top: card.offset.y + height * 0.5
+      (updatedCards[card.id] = {
+        ...card,
+        position: {
+          left: card.offset.x + width * 0.5,
+          top: card.offset.y + height * 0.5
+        }
       })
   );
+
+  return updatedCards;
 }
 
 function parseData() {
@@ -30,6 +37,7 @@ function parseData() {
 
 function addCard(cards, label) {
   const id = uuid.v4();
+
   return {
     ...cards,
     [id]: {
@@ -50,20 +58,21 @@ function App() {
   const boardRef = useRef(null);
   const boardSize = useComponentSize(boardRef);
   const { height, width } = boardSize;
+
   const showDialog = useCallback(() => setIsAddOpen(true), []);
 
   useEffect(() => {
     if (height && width) {
       const parsedCards = parseData();
-      positionCards(parsedCards, width, height);
-      setCards({ ...parsedCards });
+      setCards(positionCards(parsedCards, width, height));
     }
   }, [height, width]);
 
   function handleDelete(card) {
-    const clonedCards = {...cards};
+    const clonedCards = { ...cards };
     delete clonedCards[card.id];
-    setCards({ ...clonedCards });
+
+    setCards(clonedCards);
   }
 
   const cardEls = Object.values(cards).map(card => (
@@ -88,12 +97,18 @@ function App() {
 
         const { card, dragOffset } = dragCardInfo;
 
-        card.position = {
-          top: ev.pageY - dragOffset.y,
-          left: ev.pageX - dragOffset.x
+        const updatedCards = {
+          ...cards,
+          [card.id]: {
+            ...card,
+            position: {
+              top: ev.pageY - dragOffset.y,
+              left: ev.pageX - dragOffset.x
+            }
+          }
         };
 
-        setCards({ ...cards });
+        setCards(updatedCards);
       }}
     >
       {cardEls}
@@ -104,9 +119,12 @@ function App() {
           isOpen={isAddOpen}
           onClose={() => setIsAddOpen(false)}
           onAdd={cardText => {
-            addCard(cards, cardText);
-            positionCards(cards, width, height);
-            setCards(cards);
+            const updatedCards = positionCards(
+              addCard(cards, cardText),
+              width,
+              height
+            );
+            setCards(updatedCards);
           }}
         />
       )}
