@@ -1,6 +1,6 @@
 import React from "react";
 
-export const AddButton = React.memo(function AddButton ({onClick}) {
+export const AddButton = React.memo(function AddButton({ onClick }) {
   return (
     <button
       onClick={onClick}
