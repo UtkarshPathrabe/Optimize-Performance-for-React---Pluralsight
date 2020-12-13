@@ -3,6 +3,7 @@ import React from "react";
 export const Card = React.memo(
   function Card(props) {
     const { card, onDragStart, onDragEnd, onDoubleClick } = props;
+
     return (
       <div
         onMouseDown={ev => {
